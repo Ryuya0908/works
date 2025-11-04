@@ -1,3 +1,4 @@
+// ...existing code...
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -5,24 +6,117 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>お問い合わせフォーム</title>
     <style>
-        body { font-family: Arial, Helvetica, sans-serif; background:#f6f8fb; color:#222; padding:24px; }
-        .container { max-width:720px; margin:0 auto; background:#fff; padding:20px 24px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
-        h1 { margin-top:0; }
-        label { display:block; margin:12px 0 6px; font-weight:600; }
-        input[type="text"], input[type="email"], textarea, select {
-            width:100%; padding:10px; border:1px solid #ccd6e3; border-radius:6px; box-sizing:border-box;
+        /* 全体背景とフォント */
+        body {
+            font-family: "Noto Sans JP", Arial, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #f0f6ff 0%, #ffffff 60%);
+            color: #12233b;
+            padding: 24px;
         }
-        textarea { min-height:120px; resize:vertical; }
-        .row { display:flex; gap:12px; }
-        .row > div { flex:1; }
-        .actions { margin-top:16px; display:flex; gap:8px; align-items:center; }
-        .btn { padding:10px 16px; border:none; border-radius:6px; cursor:pointer; }
-        .btn-primary { background:#0078d4; color:#fff; }
-        .btn-secondary { background:#e1e7ee; color:#111; }
-        .msg { margin-top:12px; padding:10px 12px; border-radius:6px; display:none; }
-        .msg.success { background:#e6f7ec; color:#0b6a30; border:1px solid #bfe7c9; display:none; }
-        .msg.error { background:#fff3f3; color:#8a1a1a; border:1px solid #f1b3b3; display:none; }
-        footer { margin-top:18px; font-size:13px; color:#666; text-align:center; }
+
+        /* コンテナ */
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            background: linear-gradient(180deg, #ffffff 0%, #fbfcff 100%);
+            padding: 20px 24px;
+            border-radius: 10px;
+            box-shadow: 0 6px 24px rgba(16, 40, 80, 0.06);
+            border-left: 6px solid #0078d4; /* アクセントカラー */
+        }
+
+        h1 { margin-top: 0; color: #063b66; }
+
+        label {
+            display: block;
+            margin: 12px 0 6px;
+            font-weight: 700;
+            color: #184061;
+        }
+
+        /* 必須マークを赤めに */
+        label span[aria-hidden="true"] {
+            color: #d23a3a;
+            margin-left: 6px;
+            font-weight: 700;
+        }
+
+        input[type="text"], input[type="email"], textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #dbe8f7;
+            border-radius: 8px;
+            box-sizing: border-box;
+            background: #ffffff;
+            color: #0f2b44;
+            transition: border-color .18s ease, box-shadow .18s ease;
+        }
+
+        textarea { min-height: 120px; resize: vertical; }
+
+        /* フォーカス時の強調 */
+        input[type="text"]:focus, input[type="email"]:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #0078d4;
+            box-shadow: 0 6px 18px rgba(0, 120, 212, 0.12);
+        }
+
+        .row { display: flex; gap: 12px; }
+        .row > div { flex: 1; }
+
+        .actions { margin-top: 16px; display: flex; gap: 8px; align-items: center; }
+
+        .btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: transform .08s ease, box-shadow .08s ease, opacity .12s;
+        }
+
+        .btn:active { transform: translateY(1px); }
+
+        .btn-primary {
+            background: linear-gradient(180deg,#0078d4 0%,#005fa1 100%);
+            color: #fff;
+            box-shadow: 0 6px 16px rgba(0,120,212,0.18);
+        }
+
+        .btn-primary:hover { opacity: 0.95; box-shadow: 0 10px 26px rgba(0,120,212,0.18); }
+
+        .btn-secondary {
+            background: #f3f7fb;
+            color: #063b66;
+            border: 1px solid #e1eef9;
+        }
+
+        .btn-secondary:hover { background: #e9f2fb; }
+
+        #loading { color: #0078d4; font-weight:700; }
+
+        .msg { margin-top: 12px; padding: 10px 12px; border-radius: 8px; display: none; }
+
+        .msg.success {
+            background: linear-gradient(180deg,#e9fbf1 0%,#f6fff6 100%);
+            color: #0b6a30;
+            border: 1px solid #bfe7c9;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.4);
+        }
+
+        .msg.error {
+            background: linear-gradient(180deg,#fff6f6 0%,#fff 100%);
+            color: #8a1a1a;
+            border: 1px solid #f1b3b3;
+        }
+
+        footer { margin-top: 18px; font-size: 13px; color: #6b7785; text-align: center; }
+
+        /* 小さい画面での余白調整 */
+        @media (max-width: 520px) {
+            .row { flex-direction: column; }
+            .container { padding: 16px; }
+        }
     </style>
 </head>
 <body>
@@ -65,7 +159,7 @@
             <div id="errorMsg" class="msg error" role="alert">送信に失敗しました。時間を置いて再度お試しください。</div>
         </form>
 
-        <button onclick="alert('Button clicked!')">Click Me</button>
+        <button onclick="alert('Button clicked!')" class="btn" style="margin-top:12px;background:#fff;border:1px solid #e1eef9;color:#063b66;border-radius:8px;padding:8px 12px;">Click Me</button>
 
         <footer>
             <p>© 2025 Example Company</p>
@@ -121,3 +215,4 @@
     </script>
 </body>
 </html>
+// ...existing code...
